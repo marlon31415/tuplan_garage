@@ -1,0 +1,4 @@
+[submodule "tuplan_garage/planning/external_submodules/future_motion"]
+	path = tuplan_garage/planning/external_submodules/future_motion
+	url = git@github.com:marlon31415/future-motion.git
+	branch = nuplan-interface
