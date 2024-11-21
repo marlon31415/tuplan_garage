@@ -1,0 +1,5 @@
+scene_motion_planner:
+  _target_: tuplan_garage.planning.simulation.planner.scene_motion_planner.SceneMotionPlanner
+  _convert_: 'all'
+
+  model: ???  # Dictionary key from existing planner model config (e.g. raster_model)
