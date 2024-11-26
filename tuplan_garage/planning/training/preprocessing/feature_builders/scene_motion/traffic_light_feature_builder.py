@@ -76,10 +76,10 @@ class TrafficLightFeatureBuilder(AbstractFeatureBuilder):
 
         # PlannerInput does not contain TL information for history
         # -> add empty list for all history steps
-        # TODO: how to get past TL information?
-        tl_lane_state.append([] * (N_STEP - 1))
-        tl_lane_id.append([] * (N_STEP - 1))
-        tl_stop_point.append([] * (N_STEP - 1))
+        # how to get past TL information? -> afaik not possible with PlannerInput
+        tl_lane_state.extend([] for _ in range(N_STEP - 1))
+        tl_lane_id.extend([] for _ in range(N_STEP - 1))
+        tl_stop_point.extend([] for _ in range(N_STEP - 1))
 
         tl_lane_state.append(
             [TL_TYPES[tl_data.status.name] for tl_data in traffic_light_data]
