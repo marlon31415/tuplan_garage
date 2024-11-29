@@ -1,0 +1,47 @@
+_target_: tuplan_garage.planning.training.modeling.models.scene_motion.scene_motion_model.SceneMotionModel
+_convert_: 'all'
+
+# Parameters for predicted trajectory
+future_trajectory_sampling:
+  _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+  _convert_: 'all'
+  num_poses: 80      # number of poses in a trajectory
+  time_horizon: 8.0  # [s] time horizon of all poses
+
+# All feature builders
+feature_builders:
+  - _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.SceneMotionFeatureBuilder
+    _convert_: 'all'
+    agent_feature_builder:
+      _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.AgentFeatureBuilder
+      _convert_: 'all'
+      trajectory_sampling:
+        _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+        _convert_: 'all'
+        num_poses: 10 # only past poses (current pose not included!)
+        time_horizon: 1.0
+      only_agents: true # true: Vehicles, pedestrians, cyclists; false: all objects
+    map_polyline_feature_builder:
+      _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.MapPolylineFeatureBuilder
+      _convert_: 'all'
+      radius: 200
+    route_polyline_feature_builder:
+      _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.RoutePolylineFeatureBuilder
+      _convert_: 'all'
+      radius: 200
+    traffic_light_feature_builder:
+      _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.TrafficLightFeatureBuilder
+      _convert_: 'all'
+      num_history: 10 # needs to be the same as agent_feature_builder.trajectory_sampling.num_poses
+    pack_all: false
+    pack_history: true
+    dest_no_pred: true
+    rand_pos: -1
+    rand_yaw: -1
+
+target_builders:
+  - _target_: nuplan.planning.training.preprocessing.target_builders.ego_trajectory_target_builder.EgoTrajectoryTargetBuilder
+    _convert_: 'all'
+    future_trajectory_sampling: ${model.future_trajectory_sampling}
+
+checkpoint: ???  # path to the model checkpoint
