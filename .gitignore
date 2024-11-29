@@ -9,3 +9,9 @@
 
 # Pip
 *.egg-info
+
+# dir
+outputs/
+
+# data
+*.ckpt
