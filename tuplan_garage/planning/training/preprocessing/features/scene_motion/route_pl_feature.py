@@ -18,6 +18,7 @@ class RoutePolylineFeature(AbstractModelFeature):
     sdc_route_lane_id: FeatureDataType
     sdc_route_type: FeatureDataType
     sdc_route_xyz: FeatureDataType
+    sdc_route_goal: FeatureDataType
 
     def to_feature_tensor(self) -> RoutePolylineFeature:
         """
@@ -28,6 +29,7 @@ class RoutePolylineFeature(AbstractModelFeature):
             sdc_route_lane_id=to_tensor(self.sdc_route_lane_id),
             sdc_route_type=to_tensor(self.sdc_route_type),
             sdc_route_xyz=to_tensor(self.sdc_route_xyz),
+            sdc_route_goal=to_tensor(self.sdc_route_goal),
         )
 
     def to_device(self, device: torch.device) -> AbstractModelFeature:
@@ -39,11 +41,13 @@ class RoutePolylineFeature(AbstractModelFeature):
         validate_type(self.sdc_route_lane_id, torch.Tensor)
         validate_type(self.sdc_route_type, torch.Tensor)
         validate_type(self.sdc_route_xyz, torch.Tensor)
+        validate_type(self.sdc_route_goal, torch.Tensor)
         return RoutePolylineFeature(
             sdc_id=self.sdc_id.to(device=device),
             sdc_route_lane_id=self.sdc_route_lane_id.to(device=device),
             sdc_route_type=self.sdc_route_type.to(device=device),
             sdc_route_xyz=self.sdc_route_xyz.to(device=device),
+            sdc_route_goal=self.sdc_route_goal.to(device=device),
         )
 
     @classmethod

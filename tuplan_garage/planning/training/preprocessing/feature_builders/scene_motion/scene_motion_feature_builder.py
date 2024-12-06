@@ -1,6 +1,4 @@
 from typing import List, Tuple, Type
-import torch
-import numpy as np
 
 from nuplan.planning.simulation.planner.abstract_planner import (
     PlannerInitialization,
@@ -41,60 +39,22 @@ from tuplan_garage.planning.training.preprocessing.features.scene_motion.scene_m
     SceneMotionFeatures,
 )
 import tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.utils.pack_h5 as pack_utils
-
-PL_TYPES = {
-    "INTERSECTION": 0,
-    "STOP_LINE": 1,
-    "CROSSWALK": 2,
-    "BOUNDARIES": 3,
-    "WALKWAYS": 4,
-    "CARPARK_AREA": 5,
-    "LINE_BROKEN_SINGLE_WHITE": 6,
-    "CENTERLINE": 7,
-    "ROUTE": 8,
-}
-N_PL_TYPE = len(PL_TYPES)
-DIM_VEH_LANES = [7]
-DIM_CYC_LANES = [3, 7]
-DIM_PED_LANES = [2, 3, 4]
-
-TL_TYPES = {
-    "GREEN": 3,
-    "YELLOW": 2,
-    "RED": 1,
-    "UNKNOWN": 0,
-}
-N_TL_STATE = len(TL_TYPES)
-
-AGENT_TYPES = {
-    "VEHICLE": 0,  # Includes all four or more wheeled vehicles, as well as trailers.
-    "PEDESTRIAN": 1,  # Includes bicycles, motorcycles and tricycles.
-    "BICYCLE": 2,  # All types of pedestrians, incl. strollers and wheelchairs.
-    "TRAFFIC_CONE": 3,  # Cones that are temporarily placed to control the flow of traffic.
-    "BARRIER": 3,  # Solid barriers that can be either temporary or permanent.
-    "CZONE_SIGN": 3,  # Temporary signs that indicate construction zones.
-    "GENERIC_OBJECT": 3,  # Animals, debris, pushable/pullable objects, permanent poles.
-    "EGO": 0,  # The ego vehicle.
-}
-N_AGENT_TYPE = len(set(AGENT_TYPES.values()))
-
-N_PL_MAX = 2000
-N_TL_MAX = 40
-N_AGENT_MAX = 800
-N_PL_ROUTE_MAX = 250
-
-N_PL = 1024
-N_TL = 200  # due to polyline splitting this value can be higher than N_TL_MAX
-N_AGENT = 64
-N_AGENT_NO_SIM = N_AGENT_MAX - N_AGENT
-N_PL_ROUTE = N_PL_ROUTE_MAX
-
-THRESH_MAP = 120
-THRESH_AGENT = 120
-
-N_SDC_AGENT = 1
-N_AGENT_PRED_CHALLENGE = 8
-N_AGENT_INTERACT_CHALLENGE = 2
+from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.pack_h5_nuplan import (
+    N_AGENT_MAX,
+    N_TL_MAX,
+    N_PL_MAX,
+    N_PL_ROUTE_MAX,
+    N_AGENT_NO_SIM,
+    N_AGENT,
+    DIM_VEH_LANES,
+    THRESH_AGENT,
+    THRESH_MAP,
+    N_TL,
+    N_TL_STATE,
+    N_PL,
+    N_PL_TYPE,
+    N_PL_ROUTE,
+)
 
 
 class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
@@ -220,6 +180,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
             sdc_route_id=route_polyline_feature.sdc_route_lane_id,
             sdc_route_type=route_polyline_feature.sdc_route_type,
             sdc_route_xyz=route_polyline_feature.sdc_route_xyz,
+            sdc_route_goal=route_polyline_feature.sdc_route_goal,
             n_route_pl_max=N_PL_ROUTE_MAX,
         )
         scenario_center, scenario_yaw = pack_utils.center_at_sdc(
@@ -278,4 +239,5 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
             route_type=episode_reduced["route/type"],
             route_pos=episode_reduced["route/pos"],
             route_dir=episode_reduced["route/dir"],
+            route_goal=episode_reduced["route/goal"],
         )

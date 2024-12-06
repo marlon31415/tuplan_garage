@@ -12,17 +12,9 @@ from nuplan.planning.training.preprocessing.feature_builders.abstract_feature_bu
 from tuplan_garage.planning.training.preprocessing.features.scene_motion.traffic_light_feature import (
     TrafficLightFeature,
 )
-from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.utils.pack_h5_nuplan_utils import (
-    set_light_position,
-    mock_2d_to_3d_points,
+from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.pack_h5_nuplan import (
+    collate_tl_features,
 )
-
-TL_TYPES = {
-    "GREEN": 3,
-    "YELLOW": 2,
-    "RED": 1,
-    "UNKNOWN": 0,
-}
 
 
 class TrafficLightFeatureBuilder(AbstractFeatureBuilder):
@@ -51,7 +43,12 @@ class TrafficLightFeatureBuilder(AbstractFeatureBuilder):
         center = current_input.history.ego_states[-1].center.point
         traffic_light_data = current_input.traffic_light_data
 
-        return self._compute_feature(map_api, center, traffic_light_data)
+        N_STEP = self.num_history + 1
+        STEP_CURRENT = self.num_history
+
+        return self._compute_feature(
+            map_api, center, traffic_light_data, N_STEP, STEP_CURRENT
+        )
 
     def get_features_from_scenario(
         self, scenario: AbstractScenario
@@ -66,30 +63,12 @@ class TrafficLightFeatureBuilder(AbstractFeatureBuilder):
         map_api,
         scenario_center,
         traffic_light_data,
+        n_step,
+        step_current,
     ) -> TrafficLightFeature:
-        N_STEP = self.num_history + 1
-        scenario_center_tuple = [scenario_center.x, scenario_center.y]
-
-        tl_lane_state = []
-        tl_lane_id = []
-        tl_stop_point = []
-
-        # PlannerInput does not contain TL information for history
-        # -> add empty list for all history steps
-        # how to get past TL information? -> afaik not possible with PlannerInput
-        tl_lane_state.extend([] for _ in range(N_STEP - 1))
-        tl_lane_id.extend([] for _ in range(N_STEP - 1))
-        tl_stop_point.extend([] for _ in range(N_STEP - 1))
-
-        tl_lane_state.append(
-            [TL_TYPES[tl_data.status.name] for tl_data in traffic_light_data]
+        tl_lane_state, tl_lane_id, tl_stop_point = collate_tl_features(
+            map_api, scenario_center, traffic_light_data, n_step, step_current
         )
-        tl_lane_id.append([tl_data.lane_connector_id for tl_data in traffic_light_data])
-        tl_stop_point_2d = [
-            set_light_position(map_api, lane_id, scenario_center_tuple)
-            for lane_id in tl_lane_id[-1]
-        ]
-        tl_stop_point.append(mock_2d_to_3d_points(tl_stop_point_2d))
 
         return TrafficLightFeature(
             tl_lane_state=tl_lane_state,

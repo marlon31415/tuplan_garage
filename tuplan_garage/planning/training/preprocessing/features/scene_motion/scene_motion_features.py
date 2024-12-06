@@ -36,6 +36,7 @@ class SceneMotionFeatures(AbstractModelFeature):
     route_type: FeatureDataType
     route_pos: FeatureDataType
     route_dir: FeatureDataType
+    route_goal: FeatureDataType
 
     def to_feature_tensor(self) -> SceneMotionFeatures:
         """
@@ -64,6 +65,7 @@ class SceneMotionFeatures(AbstractModelFeature):
             route_type=to_tensor(self.route_type),
             route_pos=to_tensor(self.route_pos),
             route_dir=to_tensor(self.route_dir),
+            route_goal=to_tensor(self.route_goal),
         )
 
     def to_device(self, device: torch.device) -> SceneMotionFeatures:
@@ -93,6 +95,7 @@ class SceneMotionFeatures(AbstractModelFeature):
         validate_type(self.route_type, torch.Tensor)
         validate_type(self.route_pos, torch.Tensor)
         validate_type(self.route_dir, torch.Tensor)
+        validate_type(self.route_goal, torch.Tensor)
         return SceneMotionFeatures(
             history_agent_valid=self.history_agent_valid.to(device=device),
             history_agent_pos=self.history_agent_pos.to(device=device),
@@ -116,6 +119,7 @@ class SceneMotionFeatures(AbstractModelFeature):
             route_type=self.route_type.to(device=device),
             route_pos=self.route_pos.to(device=device),
             route_dir=self.route_dir.to(device=device),
+            route_goal=self.route_goal.to(device=device),
         )
 
     @classmethod
