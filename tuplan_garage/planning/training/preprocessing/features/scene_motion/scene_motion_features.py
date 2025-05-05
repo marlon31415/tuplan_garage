@@ -32,6 +32,7 @@ class SceneMotionFeatures(AbstractModelFeature):
     map_type: FeatureDataType
     map_pos: FeatureDataType
     map_dir: FeatureDataType
+    map_on_route: FeatureDataType
     route_valid: FeatureDataType
     route_type: FeatureDataType
     route_pos: FeatureDataType
@@ -61,6 +62,7 @@ class SceneMotionFeatures(AbstractModelFeature):
             map_type=to_tensor(self.map_type),
             map_pos=to_tensor(self.map_pos),
             map_dir=to_tensor(self.map_dir),
+            map_on_route=to_tensor(self.map_on_route),
             route_valid=to_tensor(self.route_valid),
             route_type=to_tensor(self.route_type),
             route_pos=to_tensor(self.route_pos),
@@ -91,6 +93,7 @@ class SceneMotionFeatures(AbstractModelFeature):
         validate_type(self.map_type, torch.Tensor)
         validate_type(self.map_pos, torch.Tensor)
         validate_type(self.map_dir, torch.Tensor)
+        validate_type(self.map_on_route, torch.Tensor)
         validate_type(self.route_valid, torch.Tensor)
         validate_type(self.route_type, torch.Tensor)
         validate_type(self.route_pos, torch.Tensor)
@@ -115,6 +118,7 @@ class SceneMotionFeatures(AbstractModelFeature):
             map_type=self.map_type.to(device=device),
             map_pos=self.map_pos.to(device=device),
             map_dir=self.map_dir.to(device=device),
+            map_on_route=self.map_on_route.to(device=device),
             route_valid=self.route_valid.to(device=device),
             route_type=self.route_type.to(device=device),
             route_pos=self.route_pos.to(device=device),

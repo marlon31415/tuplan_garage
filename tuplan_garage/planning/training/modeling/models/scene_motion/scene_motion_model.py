@@ -112,8 +112,10 @@ class SceneMotionModel(TorchModuleWrapper):
             "map/type": scene_motion_features["map_type"],
             "map/pos": scene_motion_features["map_pos"],
             "map/dir": scene_motion_features["map_dir"],
+            "map/on_route": scene_motion_features["map_on_route"],
             "route/valid": scene_motion_features["route_valid"],
             "route/type": scene_motion_features["route_type"],
             "route/pos": scene_motion_features["route_pos"],
             "route/dir": scene_motion_features["route_dir"],
+            "route/goal": scene_motion_features["route_goal"],
         }

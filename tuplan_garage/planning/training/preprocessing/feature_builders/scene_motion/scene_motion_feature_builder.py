@@ -145,6 +145,11 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
         N_STEP = self.num_past_poses + 1
         STEP_CURRENT = N_STEP - 1
 
+        mf_on_route = [
+            id in set(route_polyline_feature.sdc_route_lane_id)
+            for id in map_polyline_feature.mf_id
+        ]
+
         episode = {}
         n_pl = pack_utils.pack_episode_map(
             episode=episode,
@@ -152,6 +157,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
             mf_xyz=map_polyline_feature.mf_xyz,
             mf_type=map_polyline_feature.mf_type,
             mf_edge=map_polyline_feature.mf_edge,
+            mf_on_route=mf_on_route,
             n_pl_max=N_PL_MAX,
         )
         n_tl = pack_utils.pack_episode_traffic_lights(
@@ -236,6 +242,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
             map_type=episode_reduced["map/type"],
             map_pos=episode_reduced["map/pos"],
             map_dir=episode_reduced["map/dir"],
+            map_on_route=episode_reduced["map/on_route"],
             route_valid=episode_reduced["route/valid"],
             route_type=episode_reduced["route/type"],
             route_pos=episode_reduced["route/pos"],
