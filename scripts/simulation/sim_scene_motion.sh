@@ -11,4 +11,7 @@ scenario_builder=nuplan \
 planner.scene_motion_planner.model='\${model}' \
 model=scene_motion_model \
 model.checkpoint=$CHECKPOINT \
+disable_callback_parallelization=false \
+max_callback_workers=64 \
+number_of_cpus_allocated_per_simulation=8 \
 hydra.searchpath="[pkg://tuplan_garage.planning.script.config.common, pkg://tuplan_garage.planning.script.config.simulation, pkg://nuplan.planning.script.config.common, pkg://nuplan.planning.script.experiments, pkg://tuplan_garage.planning.training.modeling.models.configs]"
