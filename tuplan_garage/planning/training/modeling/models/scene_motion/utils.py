@@ -5,51 +5,6 @@ from scipy.interpolate import interp1d
 from collections.abc import Mapping
 from nuplan.planning.training.preprocessing.features.trajectory import Trajectory
 
-# The model checkpoints contain the paths to the different modules within the future-motion repo.
-# Therefore, we override these paths with those of the tuplan_garage repo.
-MODEL_CONFIG_OVERRIDE = {
-    "model": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.models.ac_scene_motion.SceneMotion",
-        "motion_decoder": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.models.ac_wayformer.Decoder"
-        },
-    },
-    "pre_processing": {
-        "agent_centric": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.data_modules.agent_centric.AgentCentricPreProcessing"
-        },
-        "ac_global": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.data.ac_scene_motion.AgentCentricSceneMotion"
-        },
-    },
-    "train_metric": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.models.metrics.planning.EgoPlanningMetrics"
-    },
-    "waymo_metric": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.models.metrics.waymo.WaymoMetrics"
-    },
-    "waymo_ego_metric": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.models.metrics.waymo_ego.WaymoEgoMetrics"
-    },
-    "post_processing": {
-        "to_dict": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.data_modules.post_processing.ToDict"
-        },
-        "get_cov_mat": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.data_modules.post_processing.GetCovMat"
-        },
-        "waymo": {
-            "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.data_modules.waymo_post_processing.WaymoPostProcessing"
-        },
-    },
-    "sub_womd": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.utils.submission.SubWOMD"
-    },
-    "sub_av2": {
-        "_target_": "tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.utils.submission.SubAV2"
-    },
-}
-
 
 def convert_predictions_to_trajectory(
     prediction_dict: dict, resample: bool

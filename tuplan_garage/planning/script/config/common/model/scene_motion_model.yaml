@@ -45,3 +45,5 @@ target_builders:
     future_trajectory_sampling: ${model.future_trajectory_sampling}
 
 checkpoint: ???  # path to the model checkpoint
+
+model_config_override: {}

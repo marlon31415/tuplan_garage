@@ -18,7 +18,6 @@ from tuplan_garage.planning.training.preprocessing.features.scene_motion.scene_m
     SceneMotionFeatures,
 )
 from tuplan_garage.planning.training.modeling.models.scene_motion.utils import (
-    MODEL_CONFIG_OVERRIDE,
     convert_predictions_to_trajectory,
     deep_merge_dicts,
 )
@@ -32,7 +31,7 @@ class SceneMotionModel(TorchModuleWrapper):
         target_builders: List[AbstractTargetBuilder],
         future_trajectory_sampling: TrajectorySampling,
         checkpoint: str,
-        # model_config_override: DictConfig,
+        model_config_override: DictConfig,
     ):
         """
         :param feature_builders: list of builders for features
@@ -46,7 +45,7 @@ class SceneMotionModel(TorchModuleWrapper):
         )
 
         self.checkpoint = checkpoint
-        self.model_config_override = MODEL_CONFIG_OVERRIDE
+        self.model_config_override = model_config_override
 
         # Load scene-motion model
         self.scene_motion_model = self._load_model_from_ckpt(
