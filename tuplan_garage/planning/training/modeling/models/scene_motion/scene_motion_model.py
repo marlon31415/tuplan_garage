@@ -17,14 +17,12 @@ from nuplan.planning.training.preprocessing.target_builders.abstract_target_buil
 from tuplan_garage.planning.training.preprocessing.features.scene_motion.scene_motion_features import (
     SceneMotionFeatures,
 )
-from tuplan_garage.planning.external_submodules.future_motion.src.future_motion import (
-    FutureMotion,
-)
 from tuplan_garage.planning.training.modeling.models.scene_motion.utils import (
     MODEL_CONFIG_OVERRIDE,
     convert_predictions_to_trajectory,
     deep_merge_dicts,
 )
+from future_motion.main import FutureMotion
 
 
 class SceneMotionModel(TorchModuleWrapper):

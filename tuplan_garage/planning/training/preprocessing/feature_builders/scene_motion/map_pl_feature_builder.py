@@ -12,9 +12,7 @@ from nuplan.planning.training.preprocessing.feature_builders.abstract_feature_bu
 from tuplan_garage.planning.training.preprocessing.features.scene_motion.map_pl_feature import (
     MapPolylineFeature,
 )
-from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.pack_h5_nuplan import (
-    collate_map_features,
-)
+from hptr_modules.pack_h5_nuplan import collate_map_features
 
 
 class MapPolylineFeatureBuilder(AbstractFeatureBuilder):

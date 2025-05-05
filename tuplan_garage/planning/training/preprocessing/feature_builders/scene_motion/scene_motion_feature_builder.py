@@ -38,8 +38,9 @@ from tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion
 from tuplan_garage.planning.training.preprocessing.features.scene_motion.scene_motion_features import (
     SceneMotionFeatures,
 )
-import tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.utils.pack_h5 as pack_utils
-from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.pack_h5_nuplan import (
+import hptr_modules.utils.pack_h5_with_nav as pack_utils
+from hptr_modules.utils.nuplan.constants import (
+    N_AGENT_TYPE,
     N_AGENT_MAX,
     N_TL_MAX,
     N_PL_MAX,

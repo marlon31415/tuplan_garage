@@ -17,11 +17,7 @@ from nuplan.planning.scenario_builder.scenario_utils import (
 from tuplan_garage.planning.training.preprocessing.features.scene_motion.agent_feature import (
     AgentFeature,
 )
-from tuplan_garage.planning.external_submodules.future_motion.src.external_submodules.hptr.src.pack_h5_nuplan import (
-    collate_agent_features,
-    N_AGENT_PRED_CHALLENGE,
-    N_AGENT_INTERACT_CHALLENGE,
-)
+from hptr_modules.pack_h5_nuplan import collate_agent_features
 
 
 class AgentFeatureBuilder(AbstractFeatureBuilder):
