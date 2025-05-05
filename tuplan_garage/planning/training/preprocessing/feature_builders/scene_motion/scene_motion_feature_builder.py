@@ -72,6 +72,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
         dest_no_pred: bool,
         rand_pos: float = -1,  # -1: disable
         rand_yaw: float = -1,  # -1: disable
+        only_agents: bool = False,
     ):
         self.agent_feature_builder = agent_feature_builder
         self.map_polyline_feature_builder = map_polyline_feature_builder
@@ -83,6 +84,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
         self.dest_no_pred = dest_no_pred
         self.rand_pos = rand_pos
         self.rand_yaw = rand_yaw
+        self.only_agents = only_agents
 
         self.num_past_poses = agent_feature_builder.num_past_poses
 
@@ -101,7 +103,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
     ) -> SceneMotionFeatures:
         """Inherited, see superclass."""
         agent_feature = self.agent_feature_builder.get_features_from_simulation(
-            current_input, initialization
+            current_input, initialization, self.only_agents
         )
         map_polyline_feature = (
             self.map_polyline_feature_builder.get_features_from_simulation(
@@ -180,6 +182,7 @@ class SceneMotionFeatureBuilder(AbstractFeatureBuilder):
             pack_history=self.pack_history,
             n_agent_max=N_AGENT_MAX,
             step_current=STEP_CURRENT,
+            n_agent_type=N_AGENT_TYPE if not self.only_agents else 3,
         )
         n_route_pl = pack_utils.pack_episode_route(
             episode=episode,

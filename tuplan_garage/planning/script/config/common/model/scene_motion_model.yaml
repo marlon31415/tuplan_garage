@@ -20,7 +20,6 @@ feature_builders:
         _convert_: 'all'
         num_poses: 10 # only past poses (current pose not included!)
         time_horizon: 1.0
-      only_agents: true # true: Vehicles, pedestrians, cyclists; false: all objects
     map_polyline_feature_builder:
       _target_: tuplan_garage.planning.training.preprocessing.feature_builders.scene_motion.scene_motion_feature_builder.MapPolylineFeatureBuilder
       _convert_: 'all'
@@ -38,6 +37,7 @@ feature_builders:
     dest_no_pred: true
     rand_pos: -1
     rand_yaw: -1
+    only_agents: false # true: Vehicles, pedestrians, cyclists; false: all objects
 
 target_builders:
   - _target_: nuplan.planning.training.preprocessing.target_builders.ego_trajectory_target_builder.EgoTrajectoryTargetBuilder
