@@ -125,7 +125,9 @@ def polynomial_yaw_interpolation_from_points(
             local_y = y[start:end]
 
             # Fit a polynomial to the local points
-            if len(local_x) > 1:  # Ensure there's enough points to fit
+            if (
+                len(local_x) > 1 and np.std(local_x) > 5e-2
+            ):  # Ensure there's enough points to fit
                 coeffs = np.polyfit(local_x, local_y, poly_order)  # Fit y = f(x)
                 # Compute the derivative at x[i]
                 deriv = np.polyder(coeffs)
