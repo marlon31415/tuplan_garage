@@ -3,6 +3,7 @@ import torch
 from copy import deepcopy
 from scipy.interpolate import interp1d
 from collections.abc import Mapping
+from einops import rearrange
 from nuplan.planning.training.preprocessing.features.trajectory import Trajectory
 
 
@@ -14,12 +15,15 @@ def convert_predictions_to_trajectory(
     :param prediction_dict: dict with model output
     :return: data suitable for Trajectory
     """
-    # conf: [n_scene, n_agent, k_pred]
-    conf = prediction_dict["waymo_scores"]
-    # trajs: [n_scene, n_step, n_agent, k_pred, 2]
-    trajs = prediction_dict["waymo_trajs"]
-    # yaw: [n_scene, n_step, n_agent, k_pred, 1]
-    yaw = prediction_dict["waymo_yaw_bbox"]
+    # pred_conf: [n_decoder, n_scene, n_target, n_pred] -> [n_scene, n_agent, k_pred]
+    conf = prediction_dict["pred_conf"][0]
+    # pred: [n_decoder, n_scene, n_target, n_pred, n_step_future, pred_dim] -> [n_scene n_step_future n_target n_pred pred_dim]
+    trajs = prediction_dict["pred_pos"][0]
+    trajs = rearrange(
+        trajs,
+        "n_scene n_target n_pred n_step_future pred_dim -> n_scene n_step_future n_target n_pred pred_dim",
+    )
+    yaw = None  # TODO: add yaw if available
     # pred_idx: [n_scene, n_target] (mapping from pred agents to all agents)
     pred_idx = prediction_dict["ref_idx"]
     # role: [n_scene, n_target, 3]
