@@ -19,6 +19,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "License :: Free for non-commercial use",
 ]
+dependencies = [
+    "nuplan-devkit",
+    "positional-encodings==6.0.1",
+    "scikit-learn==1.2.2",
+]
 
 [project.urls]
 Homepage = "https://github.com/autonomousvision/tuplan_garage"
@@ -26,4 +31,10 @@ Homepage = "https://github.com/autonomousvision/tuplan_garage"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["tuplan_garage*"]
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.uv.sources]
+nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
 
