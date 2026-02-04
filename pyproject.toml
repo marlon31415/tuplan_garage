@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tuplan-garage"
+version = "1.0.0"
+description = "tuPlan Garage of the Autonomous Vision Group."
+readme = "README.md"
+requires-python = "==3.9.*"
+license = { text = "Apache-2.0" }
+
+authors = [
+    { name = "CS_Tu @ University of Tuebingen", email = "kashyap.chitta@uni-tuebingen.de" }
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Operating System :: OS Independent",
+    "License :: Free for non-commercial use",
+]
+dependencies = [
+    "nuplan-devkit",
+    "positional-encodings==6.0.1",
+    "scikit-learn==1.2.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/autonomousvision/tuplan_garage"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tuplan_garage*"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"tuplan_garage" = ["**/*.yaml"]
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.uv.sources]
+nuplan-devkit = { git = "https://github.com/ll-nick/nuplan-devkit" }
+
