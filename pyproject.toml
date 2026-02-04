@@ -32,6 +32,12 @@ Homepage = "https://github.com/autonomousvision/tuplan_garage"
 where = ["."]
 include = ["tuplan_garage*"]
 
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"tuplan_garage" = ["**/*.yaml"]
+
 [tool.uv]
 prerelease = "allow"
 
