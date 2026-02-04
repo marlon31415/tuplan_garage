@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tuplan-garage"
+version = "1.0.0"
+description = "tuPlan Garage of the Autonomous Vision Group."
+readme = "README.md"
+requires-python = "==3.9.*"
+license = { text = "Apache-2.0" }
+
+authors = [
+    { name = "CS_Tu @ University of Tuebingen", email = "kashyap.chitta@uni-tuebingen.de" }
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Operating System :: OS Independent",
+    "License :: Free for non-commercial use",
+]
+
+[project.urls]
+Homepage = "https://github.com/autonomousvision/tuplan_garage"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tuplan_garage*"]
+
