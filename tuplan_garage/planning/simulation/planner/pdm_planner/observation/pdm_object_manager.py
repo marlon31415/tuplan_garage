@@ -70,25 +70,36 @@ class PDMObjectManager:
 
         if object.tracked_object_type in AGENT_TYPES:
             velocity = object.velocity
-            velocity_angle = np.arctan2(velocity.y, velocity.x)
-            agent_drives_forward = (
-                np.abs(normalize_angle(object.center.heading - velocity_angle))
-                < np.pi / 2
-            )
+            velocity_magnitude = velocity.magnitude()
 
-            track_heading = (
-                object.center.heading
-                if agent_drives_forward
-                else normalize_angle(object.center.heading + np.pi)
-            )
+            # Use velocity direction when velocity is significant, fallback to heading when low
+            # Threshold for minimum velocity to trust velocity direction (e.g., 0.5 m/s)
+            min_velocity_threshold = 0.5
 
-            dxy = np.array(
-                [
-                    np.cos(track_heading) * velocity.magnitude(),
-                    np.sin(track_heading) * velocity.magnitude(),
-                ],
-                dtype=np.float64,
-            ).T  # x,y velocity [m/s]
+            if velocity_magnitude > min_velocity_threshold:
+                # Use actual velocity direction for constant velocity prediction
+                dxy = np.array([velocity.x, velocity.y], dtype=np.float64).T
+            else:
+                # Fallback to heading-based direction when velocity is too low
+                velocity_angle = np.arctan2(velocity.y, velocity.x)
+                agent_drives_forward = (
+                    np.abs(normalize_angle(object.center.heading - velocity_angle))
+                    < np.pi / 2
+                )
+
+                track_heading = (
+                    object.center.heading
+                    if agent_drives_forward
+                    else normalize_angle(object.center.heading + np.pi)
+                )
+
+                dxy = np.array(
+                    [
+                        np.cos(track_heading) * velocity_magnitude,
+                        np.sin(track_heading) * velocity_magnitude,
+                    ],
+                    dtype=np.float64,
+                ).T  # x,y velocity [m/s]
 
             self._add_dynamic_object(
                 object.tracked_object_type, object.track_token, coords, dxy
