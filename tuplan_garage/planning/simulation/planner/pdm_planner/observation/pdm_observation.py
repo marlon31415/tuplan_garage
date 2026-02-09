@@ -34,6 +34,7 @@ class PDMObservation:
         proposal_sampling: TrajectorySampling,
         map_radius: float,
         observation_sample_res: int = 2,
+        ttc_horizon: float = 1.0,
     ):
         """
         Constructor of PDMObservation
@@ -41,17 +42,19 @@ class PDMObservation:
         :param proposal_sampling: Sampling parameters for proposals
         :param map_radius: radius around ego to consider, defaults to 50
         :param observation_sample_res: sample resolution of forecast, defaults to 2
+        :param ttc_horizon: extra lookahead time in seconds beyond proposal horizon (for TTC metric), defaults to 1.0
         """
         assert (
             trajectory_sampling.interval_length == proposal_sampling.interval_length
         ), "PDMObservation: Proposals and Trajectory must have equal interval length!"
 
-        # observation needs length of trajectory horizon or proposal horizon +1s (for TTC metric)
+        # observation needs length of trajectory horizon or proposal horizon + ttc_horizon (for TTC metric)
         self._sample_interval: float = trajectory_sampling.interval_length  # [s]
 
+        ttc_extra_samples = int(ttc_horizon / self._sample_interval)
         self._observation_samples: int = (
-            proposal_sampling.num_poses + int(1 / self._sample_interval)
-            if proposal_sampling.num_poses + int(1 / self._sample_interval)
+            proposal_sampling.num_poses + ttc_extra_samples
+            if proposal_sampling.num_poses + ttc_extra_samples
             > trajectory_sampling.num_poses
             else trajectory_sampling.num_poses
         )
