@@ -181,6 +181,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
         )
 
         # 6.a If enabled and emergency is expected, apply emergency brake fallback
+        trajectory = None
         if self._enable_emergency_brake_fallback:
             trajectory = self._emergency_brake.brake_if_emergency(
                 ego_state, proposal_scores, self._scorer
