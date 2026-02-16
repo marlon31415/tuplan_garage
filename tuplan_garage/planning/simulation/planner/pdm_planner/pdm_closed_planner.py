@@ -42,6 +42,7 @@ class PDMClosedPlanner(AbstractPDMClosedPlanner):
         idm_policies: BatchIDMPolicy,
         lateral_offsets: Optional[List[float]],
         map_radius: float,
+        enable_emergency_brake_fallback: bool,
     ):
         """
         Constructor for PDMClosedPlanner
@@ -50,6 +51,7 @@ class PDMClosedPlanner(AbstractPDMClosedPlanner):
         :param idm_policies: BatchIDMPolicy class
         :param lateral_offsets: centerline offsets for proposals (optional)
         :param map_radius: radius around ego to consider
+        :param enable_emergency_brake_fallback: whether to apply emergency brake fallback if an emergency is expected
         """
         super(PDMClosedPlanner, self).__init__(
             trajectory_sampling,
@@ -57,6 +59,7 @@ class PDMClosedPlanner(AbstractPDMClosedPlanner):
             idm_policies,
             lateral_offsets,
             map_radius,
+            enable_emergency_brake_fallback,
         )
 
     def initialize(self, initialization: PlannerInitialization) -> None:

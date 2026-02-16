@@ -28,3 +28,4 @@ pdm_closed_planner:
 
   lateral_offsets: [-1.0, 1.0] # Signed offsets from centerline (or null) [m]
   map_radius: 50 # Radius to consider around ego [m]
+  enable_emergency_brake_fallback: True # Whether to enable emergency brake fallback if emergency is expected

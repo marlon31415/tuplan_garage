@@ -51,6 +51,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
         idm_policies: BatchIDMPolicy,
         lateral_offsets: Optional[List[float]],
         map_radius: float,
+        enable_emergency_brake_fallback: bool,
     ):
         """
         Constructor for AbstractPDMClosedPlanner
@@ -59,6 +60,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
         :param idm_policies: BatchIDMPolicy class
         :param lateral_offsets: centerline offsets for proposals (optional)
         :param map_radius: radius around ego to consider
+        :param enable_emergency_brake_fallback: whether to apply emergency brake fallback if an emergency is expected
         """
 
         super(AbstractPDMClosedPlanner, self).__init__(map_radius)
@@ -72,6 +74,7 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
         self._proposal_sampling: int = proposal_sampling
         self._idm_policies: BatchIDMPolicy = idm_policies
         self._lateral_offsets: Optional[List[float]] = lateral_offsets
+        self._enable_emergency_brake_fallback: bool = enable_emergency_brake_fallback
 
         # observation/forecasting class
         self._observation = PDMObservation(
@@ -177,10 +180,11 @@ class AbstractPDMClosedPlanner(AbstractPDMPlanner):
             self._map_api,
         )
 
-        # 6.a Apply brake if emergency is expected
-        trajectory = self._emergency_brake.brake_if_emergency(
-            ego_state, proposal_scores, self._scorer
-        )
+        # 6.a If enabled and emergency is expected, apply emergency brake fallback
+        if self._enable_emergency_brake_fallback:
+            trajectory = self._emergency_brake.brake_if_emergency(
+                ego_state, proposal_scores, self._scorer
+            )
 
         # 6.b Otherwise, extend and output best proposal
         if trajectory is None:
